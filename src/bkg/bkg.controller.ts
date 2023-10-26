@@ -5,6 +5,11 @@ import { EventPattern } from '@nestjs/microservices';
 export class BkgCOntroller {
   @EventPattern('helloCalled')
   onHello(data: any) {
-    console.log(JSON.stringify(data))
+    console.log(`one ${JSON.stringify(data)}`);
+  }
+
+  @EventPattern('helloCalled')
+  onHelloTwo(data: any) {
+    console.log(`two ${JSON.stringify(data)}`);
   }
 }

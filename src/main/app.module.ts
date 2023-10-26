@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ClientsModule } from '@nestjs/microservices';
+import { SQSClientProxy } from 'src/sqs-client-proxy';
 
 @Module({
   imports: [
     ClientsModule.register([
-      { name: 'MATH_SERVICE', transport: Transport.TCP },
+      { name: 'MATH_SERVICE', customClass: SQSClientProxy },
     ]),
   ],
   controllers: [AppController],

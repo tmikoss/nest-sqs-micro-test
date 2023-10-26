@@ -1,0 +1,3 @@
+db: docker-compose up -d && tail -f /dev/null
+bkg: yarn start:bkg
+web: sleep 2 && yarn start:dev

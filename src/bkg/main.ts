@@ -1,12 +1,13 @@
 import { NestFactory } from '@nestjs/core';
-import { Transport, MicroserviceOptions } from '@nestjs/microservices';
+import { MicroserviceOptions } from '@nestjs/microservices';
 import { BkgModule } from './bkg.module';
+import { SQSMicroClient } from './sqs-micro-client';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
     BkgModule,
     {
-      transport: Transport.TCP,
+      strategy: new SQSMicroClient(),
     },
   );
   await app.listen();
