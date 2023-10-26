@@ -5,12 +5,10 @@ import { SQSClient } from '@aws-sdk/client-sqs';
 
 export class SQSClientProxy extends ClientProxy {
   async connect(): Promise<any> {
-    console.log('connect');
     return true;
   }
 
   async close() {
-    console.log('close');
     return true;
   }
 
@@ -28,31 +26,18 @@ export class SQSClientProxy extends ClientProxy {
       }),
     });
 
-    const message = JSON.stringify({
-      ...packet.data,
-      pattern: packet.pattern, //this is important for figuring out the handler
+    await producer.send({
+      id: Date.now().toString(),
+      body: JSON.stringify(packet),
     });
-
-    console.log(`sending: ${message}`);
-
-    try {
-      const res = await producer.send({
-        id: Date.now().toString(),
-        body: message,
-      });
-
-      console.log(`done: ${JSON.stringify(res)}`);
-    } catch (error) {
-      console.error(error);
-    }
   }
 
   publish(
-    packet: ReadPacket<any>,
-    callback: (packet: WritePacket<any>) => void,
+    _packet: ReadPacket<any>,
+    _callback: (packet: WritePacket<any>) => void,
   ): () => void {
-    console.log('message:', packet);
-    //we wont be using this in event based microservices
-    return () => console.log('teardown');
+    return () => {
+      // noop
+    };
   }
 }
